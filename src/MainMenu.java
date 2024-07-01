@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 import java.util.Arrays;
 
 
-public class MainMenu {
+public class MainMenu{
     static Scanner input = new Scanner(System.in);
     static Student[] students = new Student[100]; //initialize an array of student class which can contain 100 students
 
@@ -83,14 +83,28 @@ public class MainMenu {
     private static void initialize(Student[] students){
         //Initialize the student name and id as vacant and module marks as null
         for(int i = 0; i < students.length;i++){
-            students[i] = new Student("vacant", "vacant", new Module(null,null,null));
+            students[i] = new Student();
+
         }
         System.out.println();
     }
 
-    public static boolean isMarkInvalid(double mark){
-        //Checks if a mark is between 0 and 100
-        return mark > 100 || mark < 0;
+    public static boolean wishToContinue(){
+        while(true) {
+            System.out.println("Do you wish to continue: ");
+            String response = input.next().toLowerCase();
+
+            if (response.equals("yes")) {
+                return true;
+            }
+            else if (response.equals("no")) {
+                System.out.println("Back to Main Menu");
+                return false;
+            }
+            else {
+                System.out.println("Enter yes/no");
+            }
+        }
     }
 
 
@@ -155,21 +169,9 @@ public class MainMenu {
                                 }
                                 else{
                                     System.out.println("This Student ID already exists!!!");
-                                    while(true) {
-                                        System.out.println("Do you wish to continue: ");
-                                        String response = input.next();
-
-                                        if (response.equals("yes")) {
-                                            break; //Goes back to the beginning of the loop
-                                        }
-                                        else if (response.equals("no")) {
-                                            System.out.println("Back to Main Menu");
-                                            System.out.println();
-                                            return; //Exits the current menu option and goes back ot the main menu
-                                        }
-                                        else {
-                                            System.out.println("Enter yes/no");
-                                        }
+                                    boolean response = wishToContinue();
+                                    if(!response){
+                                        return;
                                     }
                                 }
                             }
@@ -181,20 +183,9 @@ public class MainMenu {
 
                 else{
                     System.out.println("Number "+ number +" is occupied");
-                    while(true) {
-                        System.out.println("Do you wish to continue: ");
-                        String response = input.next();
-
-                        if (response.equals("yes")) {
-                            break;
-                        }
-                        else if (response.equals("no")) {
-                            System.out.println("Back to Main Menu");
-                            return;
-                        }
-                        else {
-                            System.out.println("Enter yes/no");
-                        }
+                    boolean response = wishToContinue();
+                    if(!response){
+                        return;
                     }
                     continue;
                 }
@@ -212,22 +203,9 @@ public class MainMenu {
                     }
                 }
 
-
-
-                while(true) {
-                System.out.println("Do you wish to continue: ");
-                String response = input.next();
-
-                    if (response.equals("yes")) {
-                        break;
-                    }
-                    else if (response.equals("no")) {
-                        System.out.println("Back to Main Menu");
-                        return;
-                    }
-                    else {
-                        System.out.println("Enter yes/no");
-                    }
+                boolean response = wishToContinue();
+                if(!response){
+                    return;
                 }
             }
         }
@@ -249,20 +227,9 @@ public class MainMenu {
                         }
                     }
                     System.out.println("This Student ID does not exist!!!");
-                    while(true) {
-                        System.out.println("Do you wish to continue: ");
-                        String response = input.next();
-
-                        if (response.equals("yes")) {
-                            break;
-                        }
-                        else if (response.equals("no")) {
-                            System.out.println("Back to Main Menu");
-                            return;
-                        }
-                        else {
-                            System.out.println("Enter yes/no");
-                        }
+                    boolean response = wishToContinue();
+                    if(!response){
+                        return;
                     }
                 }
                 else{
@@ -312,24 +279,12 @@ public class MainMenu {
                             break;
                         }
                     }
-                    if(!idExist) { //if the id if not found returns true
+                    if(!idExist) { //if the id is not found returns true
                         System.out.println("This Student ID does not exist!!!");
                     }
-                    while(true) {
-                        System.out.println("Do you wish to continue: ");
-                        String response = input.next();
-
-                        if (response.equals("yes")) {
-                            break;
-                        }
-                        else if (response.equals("no")) {
-                            System.out.println("Back to Main Menu");
-                            System.out.println();
-                            return;
-                        }
-                        else {
-                            System.out.println("Enter yes/no");
-                        }
+                    boolean response = wishToContinue();
+                    if(!response){
+                        return;
                     }
 
                 }
@@ -382,7 +337,9 @@ public class MainMenu {
                 else { //If all the information including module marks are recorded
                     students[index].setStudentName(details[0]);
                     students[index].setStudentId(details[1]);
-                    students[index].setModule(new Module(Integer.parseInt(details[2]), (Integer.parseInt(details[3])), (Integer.parseInt(details[4]))));
+                    students[index].setMark1(Integer.parseInt(details[2]));
+                    students[index].setMark2(Integer.parseInt(details[3]));
+                    students[index].setMark3(Integer.parseInt(details[4]));
                 }
                 index++;
             }
@@ -429,7 +386,7 @@ public class MainMenu {
     }
 
     public static void moduleDetailsManagement(){
-        //Creation if sub menu for option 8
+        //Creation of sub menu for option 8
         while(true) {
             System.out.println("Welcome to the Module Management System");
             System.out.println("a. Add Student Name");
@@ -468,7 +425,6 @@ public class MainMenu {
                 catch (InputMismatchException e) {
                     System.out.println("Please enter a valid input");
                     input.next();
-                    continue;
                 }
 
             }
@@ -482,11 +438,13 @@ public class MainMenu {
                 boolean idExist = false;
                 System.out.println("Enter the Student ID: ");
                 String id = input.next();
+                input.nextLine();
                 for (Student student : students) {
                     if (student.getStudentId().equals(id)) {
                         idExist = true;
                         System.out.println("Enter the Student Name: ");
-                        student.setStudentName(input.nextLine());
+                        String name = input.nextLine();
+                        student.setStudentName(name);
                         System.out.println("Student name has been recorded successfully");
                     }
 
@@ -499,25 +457,9 @@ public class MainMenu {
                 System.out.println("Invalid Input");
                 input.next();
             }
-            boolean exit = true;
-            while(true) {
-                System.out.println("Do you wish to continue: ");
-                String response = input.next();
-
-                if (response.equals("yes")) {
-                    exit = false;
-                    break;
-                }
-                else if (response.equals("no")) {
-                    System.out.println("Back to Main Menu");
-                    break;
-                }
-                else {
-                    System.out.println("Enter yes/no");
-                }
-            }
-            if(exit){
-                break;
+            boolean response = wishToContinue();
+            if(!response){
+                return;
             }
         }
     }
@@ -531,33 +473,50 @@ public class MainMenu {
                 for(Student student : students){
                     if(student.getStudentId().equals(id)){
                         found = true;
-                        while(true) {
-                            System.out.println("Enter Module 01 Marks: ");
-                            int mark1 = input.nextInt();
+                            while(true) {
+                                try{
+                                System.out.println("Enter Module 01 Marks: ");
+                                int mark1 = input.nextInt();
+                                student.setMark1(mark1);
+                                    System.out.println(student.getMark1());
+                                break;
+                                }
+                                catch(IllegalArgumentException e){
+                                    System.out.println(e.getMessage());
+                                }
 
-                            if (isMarkInvalid(mark1)) { //Check if the input is between 0 and 100
-                                System.out.println("Invalid Marks. Please enter a mark between 1 to 100");
-                                continue;
                             }
 
-                            System.out.println("Enter Module 02 Marks: ");
-                            int mark2 = input.nextInt();
-                            if (isMarkInvalid(mark2)) {
-                                System.out.println("Invalid Marks. Please enter a mark between 1 to 100");
-                                continue;
+                            while(true) {
+                                try{
+                                    System.out.println("Enter Module 02 Marks: ");
+                                    int mark2 = input.nextInt();
+                                    student.setMark2(mark2);
+                                    System.out.println(student.getMark2());
+                                    break;
+                                }
+                                catch(IllegalArgumentException e){
+                                    System.out.println(e.getMessage());
+                                }
+
                             }
 
-                            System.out.println("Enter Module 03 Marks: ");
-                            int mark3 = input.nextInt();
-                            if (isMarkInvalid(mark3)) {
-                                System.out.println("Invalid Marks. Please enter a mark between 1 to 100");
-                                continue;
-                            }
+                            while(true) {
+                                try{
+                                    System.out.println("Enter Module 03 Marks: ");
+                                    int mark3 = input.nextInt();
+                                    student.setMark3(mark3);
+                                    System.out.println(student.getMark3());
+                                    break;
+                                }
+                                catch(IllegalArgumentException e){
+                                    System.out.println(e.getMessage());
+                                }
 
-                            student.setModule(new Module(mark1, mark2, mark3));
+                            }
                             System.out.println("Module marks for Student ID " + student.getStudentId() + " was Recorded Successfully...");
                             break;
-                        }
+
                     }
 
                 }
@@ -570,23 +529,10 @@ public class MainMenu {
                 continue;
             }
 
-            while(true) {
-
-                System.out.println("Do you wish to continue: ");
-                String response = input.next();
-
-                if (response.equals("yes")) {
-                    break;
-                }
-                else if (response.equals("no")) {
-                    System.out.println("Back to Module Management Details Menu");
-                    return;
-                }
-                else {
-                    System.out.println("Enter yes/no");
-                }
+            boolean response = wishToContinue();
+            if(!response){
+                return;
             }
-
 
         }
 
@@ -596,7 +542,7 @@ public class MainMenu {
         int count = 0;
 
         for (int i = 0; i < 100; i++) {
-            if (!students[i].getStudentName().equals("vacant")) {
+            if (!students[i].getStudentId().equals("vacant")) {
                 count += 1;
             }
         }
@@ -607,7 +553,7 @@ public class MainMenu {
         int highMarksModule3 = 0;
         if(count != 0) {
             for (Student student : students) {
-                if (!student.getStudentId().equals("vacant") && student.getMark1() != null && student.getMark2() != null && student.getMark3() != null){ //Ensures that the student in the current iteration holds a student not vacant and have all three module marks entered
+                if (student.getMark1() != null && student.getMark2() != null && student.getMark3() != null){ //Ensures that the student in the current iteration holds a student not vacant and have all three module marks entered
                     if (student.getMark1() > 40) {
                         highMarksModule1++;
                     }
@@ -632,17 +578,16 @@ public class MainMenu {
         }
         System.out.println();
 
-
-
     }
 
     public static void getFullReport(){
         ArrayList<Student> studentsWithMarks = new ArrayList<>(); //Create new ArrayList of Student class
         for(Student student : students){
-            if(student.module.getAverage() != null){
+            if(student.getAverage() != null){
                 studentsWithMarks.add(student); //Adds the students to the ArrayList whose marks are not null(If the marks are not null, average is also not null)
             }
         }
+
 
 
 
@@ -650,7 +595,7 @@ public class MainMenu {
         while(swapOccurred){
             swapOccurred = false;
         for(int i = 0; i < studentsWithMarks.size() - 1; i++) { //Loop stops one index before the size of the ArrayList because no more students to be compared after the last student
-                if (studentsWithMarks.get(i).module.getAverage() < studentsWithMarks.get(i + 1).module.getAverage()) { //Swaps the places if the first average is smaller than the next average to make the list in descending order
+                if (studentsWithMarks.get(i).getAverage() < studentsWithMarks.get(i + 1).getAverage()) { //Swaps the places if the first average is smaller than the next average to make the list in descending order
                     swapOccurred = true;
                     Student highAvg = studentsWithMarks.get(i+1);
                     studentsWithMarks.set(i+1 , studentsWithMarks.get(i));
@@ -660,7 +605,7 @@ public class MainMenu {
         }
 
         }
-        System.out.printf("%-20s %-20s %-10s %-10s %-10s %-10s %-20s %-20s%n", "Student Name", "Student ID", "Mark 01", "Mark 02", "Mark 03" , "Total", "Average", "Grade");
+        System.out.printf("%-20s %-20s %-10s %-10s %-10s %-10s %-20s %-20s%n", "Student Name", "Student ID", "Mark 01", "Mark 02", "Mark 03" , "Total", "Average", "Grade"); //format string
         for(Student student : studentsWithMarks){
             student.fullReport(student);
         }

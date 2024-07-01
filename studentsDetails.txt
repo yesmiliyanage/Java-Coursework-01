@@ -2,12 +2,10 @@ vacant,vacant
 vacant,vacant
 vacant,vacant
 vacant,vacant
-Chamila Nawarathna,w2084767
 vacant,vacant
 vacant,vacant
 vacant,vacant
 vacant,vacant
-Yesmi Liyanage,w2084737,90,87,89
 vacant,vacant
 vacant,vacant
 vacant,vacant
@@ -17,7 +15,6 @@ vacant,vacant
 vacant,vacant
 vacant,vacant
 vacant,vacant
-Dasuni Liyanage,w2084738,98,100,80
 vacant,vacant
 vacant,vacant
 vacant,vacant
@@ -35,17 +32,13 @@ vacant,vacant
 vacant,vacant
 vacant,vacant
 vacant,vacant
-Nishantha Liyanage,w2085747
 vacant,vacant
-Tenuki Nehansa,w2096789
 vacant,vacant
 vacant,vacant
 vacant,vacant
 vacant,vacant
-Anuki Nawarathna,w2081918
 vacant,vacant
 vacant,vacant
-Numeth Dinujaya,w2098787,90,89,100
 vacant,vacant
 vacant,vacant
 vacant,vacant
@@ -77,7 +70,6 @@ vacant,vacant
 vacant,vacant
 vacant,vacant
 vacant,vacant
-Adeesha Nawarathna,w2086757
 vacant,vacant
 vacant,vacant
 vacant,vacant
@@ -98,3 +90,11 @@ vacant,vacant
 vacant,vacant
 vacant,vacant
 vacant,vacant
+vacant,vacant
+vacant,vacant
+vacant,vacant
+vacant,vacant
+Nishantha Liyanage,w2084740
+Chamila Nawarathna,w2084739
+Dasuni Liyanage,w2084738,100,98,89
+Yesmi Liyanage,w2084737,99,100,98
