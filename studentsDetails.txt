@@ -17,6 +17,7 @@ vacant,vacant
 vacant,vacant
 vacant,vacant
 vacant,vacant
+dasuni,w2084739
 vacant,vacant
 vacant,vacant
 vacant,vacant
@@ -26,6 +27,7 @@ vacant,vacant
 vacant,vacant
 vacant,vacant
 vacant,vacant
+yesmi,w2084737,99,90,100
 vacant,vacant
 vacant,vacant
 vacant,vacant
@@ -94,7 +96,5 @@ vacant,vacant
 vacant,vacant
 vacant,vacant
 vacant,vacant
-Nishantha Liyanage,w2084740
-Chamila Nawarathna,w2084739
-Dasuni Liyanage,w2084738,100,98,89
-Yesmi Liyanage,w2084737,99,100,98
+vacant,vacant
+vacant,vacant

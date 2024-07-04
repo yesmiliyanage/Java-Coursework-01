@@ -30,6 +30,7 @@ public class MainMenu{
                 try {
                     System.out.println("Select an option : ");
                     choice = input.nextInt();
+                    input.nextLine();
 
                         switch (choice) {
                             case 1:
@@ -60,7 +61,7 @@ public class MainMenu{
                                 System.out.println("Exiting the program....");
                                 return;
                             default:
-                                System.out.println("Select number between 1 to 9");
+                                System.err.println("Select a number between 1 to 9");
                                 continue;
 
                         }
@@ -69,7 +70,7 @@ public class MainMenu{
 
                 }
                 catch (Exception e) {
-                    System.out.println("Enter a valid input");
+                    System.err.println("Enter a valid input");
                     input.next();
                 }
 
@@ -92,7 +93,7 @@ public class MainMenu{
     public static boolean wishToContinue(){
         while(true) {
             System.out.println("Do you wish to continue: ");
-            String response = input.next().toLowerCase();
+            String response = input.nextLine().toLowerCase();
 
             if (response.equals("yes")) {
                 return true;
@@ -102,7 +103,7 @@ public class MainMenu{
                 return false;
             }
             else {
-                System.out.println("Enter yes/no");
+                System.err.println("Enter yes/no");
             }
         }
     }
@@ -134,12 +135,12 @@ public class MainMenu{
             input.nextLine();
             }
             catch(Exception e){
-                System.out.println("Enter a valid input");
+                System.err.println("Enter a valid input");
                 input.next();
                 continue;
             }
             if(number < 1 || number > 100){
-                System.out.println("Select a number between 1 to 100");
+                System.err.println("Select a number between 1 to 100");
             }
             else{
                 int i = number - 1;
@@ -164,7 +165,7 @@ public class MainMenu{
                                         students[i].setStudentId(id);
                                         break;
                                     } else {
-                                        System.out.println("Incorrect Format. Please enter the Student ID again (Ex: w4513490)");
+                                        System.err.println("Incorrect Format. Please enter the Student ID again (Ex: w4513490)");
                                     }
                                 }
                                 else{
@@ -176,7 +177,7 @@ public class MainMenu{
                                 }
                             }
                             catch (Exception e) {
-                                System.out.println("Enter a valid input");
+                                System.err.println("Enter a valid input");
                             }
                         }
                 }
@@ -198,7 +199,7 @@ public class MainMenu{
                         System.out.println("Student registration is successful!!!");
                         break;
                     } catch (Exception e) {
-                        System.out.println("Enter a valid input");
+                        System.err.println("Enter a valid input");
                         input.next();
                     }
                 }
@@ -214,7 +215,7 @@ public class MainMenu{
         while(true) {
             try {
                 System.out.println("Enter the Student ID to delete the details: ");
-                String id = input.next();
+                String id = input.nextLine();
                 Pattern pattern = Pattern.compile("^w\\d{7}$"); //Compiles the regular expression
                 Matcher matcher = pattern.matcher(id); //Creates a Matcher object that will match the user input with the compiled pattern
                 if(matcher.find()){ //if the user input matches with the compiled pattern returns true
@@ -233,27 +234,16 @@ public class MainMenu{
                     }
                 }
                 else{
-                    System.out.println("Please enter a valid ID (Ex: w1234568)");
-                    while(true) {
-                        System.out.println("Do you wish to continue: ");
-                        String response = input.next();
-
-                        if (response.equals("yes")) {
-                            break;
-                        }
-                        else if (response.equals("no")) {
-                            System.out.println("Back to Main Menu");
-                            return;
-                        }
-                        else {
-                            System.out.println("Enter yes/no");
-                        }
+                    System.err.println("Please enter a valid ID (Ex: w1234568)");
+                    boolean response = wishToContinue();
+                    if(!response) {
+                        return;
                     }
 
                 }
             }
             catch(InputMismatchException e){
-                System.out.println("Enter a valid input");
+                System.err.println("Enter a valid input");
                 input.next();
             }
         }
@@ -265,7 +255,7 @@ public class MainMenu{
             try {
                 boolean idExist = false;
                 System.out.println("Enter the Student ID to find the details: ");
-                String id = input.next();
+                String id = input.nextLine();
                 Pattern pattern = Pattern.compile("w\\d{7}$");
                 Matcher matcher = pattern.matcher(id);
                 if(matcher.find()){
@@ -289,12 +279,12 @@ public class MainMenu{
 
                 }
                 else{
-                    System.out.println("Please enter a valid ID (Ex: w1234568)");
+                    System.err.println("Please enter a valid ID (Ex: w1234568)");
 
                 }
             }
-            catch(InputMismatchException e){
-                System.out.println("Enter a valid input");
+            catch(Exception e){
+                System.err.println("Enter a valid input");
                 input.next();
             }
 
@@ -314,10 +304,10 @@ public class MainMenu{
             System.out.println("All the details saved successfully");
         }
         catch(FileNotFoundException e){
-            System.out.println("This file cannot be found");
+            System.err.println("This file cannot be found");
         }
         catch(IOException e){
-            System.out.println("Error occurred: "+e);
+            System.err.println("Error occurred: "+e);
         }
 
 
@@ -337,9 +327,9 @@ public class MainMenu{
                 else { //If all the information including module marks are recorded
                     students[index].setStudentName(details[0]);
                     students[index].setStudentId(details[1]);
-                    students[index].setMark1(Integer.parseInt(details[2]));
-                    students[index].setMark2(Integer.parseInt(details[3]));
-                    students[index].setMark3(Integer.parseInt(details[4]));
+                    students[index].setModule1(Integer.parseInt(details[2]));
+                    students[index].setModule2(Integer.parseInt(details[3]));
+                    students[index].setModule3(Integer.parseInt(details[4]));
                 }
                 index++;
             }
@@ -347,13 +337,13 @@ public class MainMenu{
             System.out.println();
         }
         catch(FileNotFoundException e){
-            System.out.println("Data cannot be loaded from the file");
+            System.err.println("File cannot be found. Data cannot be loaded from the file");
         }
         catch(IOException e){
-            System.out.println("Error Occurred: " + e);
+            System.err.println("Error Occurred: " + e);
         }
         catch(Exception e){
-            System.out.println("Error Occurred"+ e);
+            System.err.println("Error Occurred"+ e);
         }
 
     }
@@ -398,7 +388,7 @@ public class MainMenu{
             while (true) {
                 try {
                     System.out.println("Select an Option : ");
-                    String choice = input.next();
+                    String choice = input.nextLine();
                     switch (choice) {
                         case "a":
                             addStudentName();
@@ -416,14 +406,14 @@ public class MainMenu{
                             System.out.println("Back to Main Menu");
                             return;
                         default:
-                            System.out.println("Invalid input! Enter a,b,c or d");
+                            System.err.println("Invalid input! Enter a,b,c or d");
                             continue;
                     }
                     break;
 
                 }
-                catch (InputMismatchException e) {
-                    System.out.println("Please enter a valid input");
+                catch (Exception e) {
+                    System.err.println("Please enter a valid input");
                     input.next();
                 }
 
@@ -453,8 +443,8 @@ public class MainMenu{
                     System.out.println("This Student ID does not exist");
                 }
             }
-            catch(InputMismatchException e){
-                System.out.println("Invalid Input");
+            catch(Exception e){
+                System.err.println("Invalid Input");
                 input.next();
             }
             boolean response = wishToContinue();
@@ -469,7 +459,7 @@ public class MainMenu{
             try{
                 boolean found = false;
                 System.out.println("Enter the StudentID: ");
-                String id = input.next();
+                String id = input.nextLine();
                 for(Student student : students){
                     if(student.getStudentId().equals(id)){
                         found = true;
@@ -477,12 +467,11 @@ public class MainMenu{
                                 try{
                                 System.out.println("Enter Module 01 Marks: ");
                                 int mark1 = input.nextInt();
-                                student.setMark1(mark1);
-                                    System.out.println(student.getMark1());
+                                student.setModule1(mark1);
                                 break;
                                 }
                                 catch(IllegalArgumentException e){
-                                    System.out.println(e.getMessage());
+                                    System.err.println(e.getMessage());
                                 }
 
                             }
@@ -491,12 +480,11 @@ public class MainMenu{
                                 try{
                                     System.out.println("Enter Module 02 Marks: ");
                                     int mark2 = input.nextInt();
-                                    student.setMark2(mark2);
-                                    System.out.println(student.getMark2());
+                                    student.setModule2(mark2);
                                     break;
                                 }
                                 catch(IllegalArgumentException e){
-                                    System.out.println(e.getMessage());
+                                    System.err.println(e.getMessage());
                                 }
 
                             }
@@ -505,15 +493,15 @@ public class MainMenu{
                                 try{
                                     System.out.println("Enter Module 03 Marks: ");
                                     int mark3 = input.nextInt();
-                                    student.setMark3(mark3);
-                                    System.out.println(student.getMark3());
+                                    student.setModule3(mark3);
                                     break;
                                 }
                                 catch(IllegalArgumentException e){
-                                    System.out.println(e.getMessage());
+                                    System.err.println(e.getMessage());
                                 }
 
                             }
+                            input.nextLine();
                             System.out.println("Module marks for Student ID " + student.getStudentId() + " was Recorded Successfully...");
                             break;
 
@@ -524,8 +512,8 @@ public class MainMenu{
                     System.out.println("This student ID does not exist");
                 }
             }
-            catch(InputMismatchException e){
-                System.out.println("Enter a valid input");
+            catch(Exception e){
+                System.err.println("Enter a valid input");
                 continue;
             }
 
@@ -553,14 +541,14 @@ public class MainMenu{
         int highMarksModule3 = 0;
         if(count != 0) {
             for (Student student : students) {
-                if (student.getMark1() != null && student.getMark2() != null && student.getMark3() != null){ //Ensures that the student in the current iteration holds a student not vacant and have all three module marks entered
-                    if (student.getMark1() > 40) {
+                if (student.getModule1() != null && student.getModule2() != null && student.getModule3() != null){ //Ensures that the student in the current iteration holds a student not vacant and have all three module marks entered
+                    if (student.getModule1() > 40) {
                         highMarksModule1++;
                     }
-                    if (student.getMark2() > 40) {
+                    if (student.getModule2() > 40) {
                         highMarksModule2++;
                     }
-                    if (student.getMark3() > 40) {
+                    if (student.getModule3() > 40) {
                         highMarksModule3++;
                     }
                 }
@@ -568,6 +556,7 @@ public class MainMenu{
             }
 
             System.out.println("Number of Students who Scored Higher than 40 in : ");
+            System.out.println("Marks will be counted only for the students whose all the three module marks are entered");
             System.out.println("Module 01 : " + highMarksModule1);
             System.out.println("Module 02 : " + highMarksModule2);
             System.out.println("Module 03 : " + highMarksModule3);
