@@ -1,23 +1,39 @@
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class Student{
     private String studentId;
     private String studentName;
-    private Module module1;
-    private Module module2;
-    private Module module3;
+    private final Module module1;
+    private final Module module2;
+    private final Module module3;
 
     public Student(){
-        module1 = new Module(null);
-        module2 = new Module(null);
-        module3 = new Module(null);
+        module1 = new Module(-1);
+        module2 = new Module(-1);
+        module3 = new Module(-1);
         this.studentName = "vacant";
         this.studentId = "vacant";
     }
 
     public String getStudentId(){
         return this.studentId;
+
     }
-    public void setStudentId(String id){
-        studentId = id;
+    public void setStudentId(String id) {
+        if(id.equals("vacant")){
+            studentId = id;
+        }
+        else{
+            Pattern pattern = Pattern.compile("^w\\d{7}$");
+            Matcher matcher = pattern.matcher(id);
+            if (matcher.find()) {
+                this.studentId = id;
+            }
+            else{
+                throw new IllegalArgumentException("Incorrect Format. Please enter the Student ID again (Ex: w4513490)");
+            }
+        }
     }
 
     public void setStudentName(String name){
@@ -28,51 +44,51 @@ public class Student{
         return this.studentName;
     }
 
-    public Integer getModule1() {
+    public double getModule1() {
         return module1.getModuleMark();
     }
 
-    public void setModule1(Integer moduleMark1) {
+    public void setModule1(double moduleMark1) {
         this.module1.setModuleMark(moduleMark1);
     }
 
-    public Integer getModule2() {
+    public double getModule2() {
         return module2.getModuleMark();
     }
 
-    public void setModule2(Integer moduleMark2) {
+    public void setModule2(double moduleMark2) {
         this.module2.setModuleMark(moduleMark2);
     }
 
-    public Integer getModule3() {
+    public double getModule3() {
         return module3.getModuleMark();
     }
 
-    public void setModule3(Integer moduleMark3) {
+    public void setModule3(double moduleMark3) {
         this.module3.setModuleMark(moduleMark3);
     }
 
-    public Integer getTotalMark(){
-        if(getModule1() != null && getModule2() != null && getModule3()!= null ){
+    public double getTotalMark(){
+        if(getModule1() != -1 && getModule2() != -1 && getModule3()!= -1 ){
             return getModule1() + getModule2() + getModule3();
         }
         else{
-            return null;
+            return -1;
         }
     }
 
-    public Double getAverage(){
-        if(getTotalMark() != null) {
+    public double getAverage(){
+        if(getTotalMark() != -1) {
             return (getModule1() + getModule2() + getModule3()) / 3.0;
         }
         else{
-            return null;
+            return -1;
         }
     }
 
     public String finalGrade() {
-        Double average = getAverage();
-        if (average != null) {
+        double average = getAverage();
+        if (average != -1.0) {
             if (average >= 80) {
                 return "Distinction";
             } else if (average >= 70) {
@@ -84,21 +100,25 @@ public class Student{
             }
         }
         else{
-            return null;
+            return "Issue with the average";
         }
     }
 
     public String fullDetailsForStudent() {
-        if (getTotalMark() == null) {
+        if (getTotalMark() == -1) {
             return this.studentName + "," + this.studentId;
         } else {
             return this.studentName + "," + this.studentId + "," + getModule1() + "," + getModule2() + "," + getModule3();
         }
     }
 
-    public void fullReport(Student student) {
-        if (!student.studentName.equals("vacant") && !student.studentId.equals("vacant") && getTotalMark() != null) {
-            System.out.printf("%-20s %-20s %-10s %-10s %-10s %-10s %-20s %-20s%n", student.studentName, student.studentId, module1.getModuleMark(), module2.getModuleMark(), module3.getModuleMark(), getTotalMark(), getAverage(), finalGrade());
+    public String markAndGrade(Module module){
+        return module.getModuleMark()+"("+module.getModuleGrade()+")";
+    }
+
+    public void fullReport() {
+        if (!studentName.equals("vacant") && !studentId.equals("vacant") && getTotalMark() != -1) {
+            System.out.printf("%-20s %-20s %-20s %-20s %-20s %-10s %-20s %-20s%n", studentName, studentId, markAndGrade(module1), markAndGrade(module2), markAndGrade(module3), getTotalMark(), getAverage(), finalGrade());
         }
     }
 

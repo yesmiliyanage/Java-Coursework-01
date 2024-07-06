@@ -1,11 +1,13 @@
 vacant,vacant
 vacant,vacant
+new sample student1,w2085757
 vacant,vacant
 vacant,vacant
 vacant,vacant
 vacant,vacant
 vacant,vacant
 vacant,vacant
+Dasuni Liyanage,w2084738
 vacant,vacant
 vacant,vacant
 vacant,vacant
@@ -15,9 +17,9 @@ vacant,vacant
 vacant,vacant
 vacant,vacant
 vacant,vacant
+Yesmi Liyanage,w2084737,90,100,99
 vacant,vacant
 vacant,vacant
-dasuni,w2084739
 vacant,vacant
 vacant,vacant
 vacant,vacant
@@ -27,7 +29,6 @@ vacant,vacant
 vacant,vacant
 vacant,vacant
 vacant,vacant
-yesmi,w2084737,99,90,100
 vacant,vacant
 vacant,vacant
 vacant,vacant
@@ -86,8 +87,7 @@ vacant,vacant
 vacant,vacant
 vacant,vacant
 vacant,vacant
-vacant,vacant
-vacant,vacant
+sample student2,w2086767
 vacant,vacant
 vacant,vacant
 vacant,vacant
