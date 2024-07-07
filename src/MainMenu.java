@@ -32,6 +32,7 @@ public class MainMenu{
                     choice = input.nextInt();
                     input.nextLine();
 
+
                         switch (choice) {
                             case 1:
                                 checkSeats();
@@ -62,6 +63,7 @@ public class MainMenu{
                                 return;
                             default:
                                 System.err.println("Select a number between 1 to 9");
+                                input.nextLine();
                                 continue;
 
                         }
@@ -69,9 +71,13 @@ public class MainMenu{
 
 
                 }
+                catch (InputMismatchException e) {
+                    System.err.println("Invalid input. Please try again");
+                    input.nextLine();
+                }
                 catch (Exception e) {
                     System.err.println("Enter a valid input");
-                    input.next();
+                    input.nextLine();
                 }
 
             }
@@ -200,7 +206,9 @@ public class MainMenu{
                 while(true) {
                     try {
                         System.out.println("Enter the student's name: ");
-                        students[i].setStudentName(input.nextLine());
+                        String name = input.nextLine();
+                        name = name.substring(0,1).toUpperCase() + name.substring(1); //Capitalize the first letter of the first name
+                        students[i].setStudentName(name);
                         System.out.println("Student registration is successful!!!");
                         break;
                     } catch (Exception e) {
@@ -219,23 +227,29 @@ public class MainMenu{
     public static void deleteStudent(){
         while(true) {
             try {
+                boolean idExist = false;
                 System.out.println("Enter the Student ID to delete the details: ");
                 String id = input.nextLine();
                 boolean pattern = idPattern(id);
                 if(pattern){ //if the user input matches with the compiled pattern returns true
                     for(int i = 0;i < 100;i++){
                         if(students[i].getStudentId().equals(id)){
+                            idExist = true;
                             students[i].setStudentName("vacant");
                             students[i].setStudentId("vacant");
                             System.out.println("Details for Student ID " +id+ " was deleted successfully...");
-                            return;
+                            break;
                         }
                     }
-                    System.out.println("This Student ID does not exist!!!");
-                    boolean response = wishToContinue();
-                    if(!response){
-                        return;
+                    if(!idExist){
+                        System.out.println("This Student ID does not exist!!!");
+                        boolean response = wishToContinue();
+                        if(!response){
+                            return;
+                        }
+
                     }
+
                 }
                 else{
                     System.err.println("Please enter a valid ID (Ex: w1234568)");
@@ -245,6 +259,11 @@ public class MainMenu{
                 System.err.println("Enter a valid input");
                 input.next();
             }
+            boolean response = wishToContinue();
+            if(!response){
+                return;
+            }
+
         }
 
     }
@@ -348,26 +367,42 @@ public class MainMenu{
 
 
     private static void viewNames(){
-        Student[] studentsCopy = students.clone();
-        Arrays.sort(studentsCopy, (s1,s2) -> s1.getStudentName().compareTo(s2.getStudentName()));
-        int order = 1;
         boolean studentsExist = false;
-        for(Student name : studentsCopy){
-            if(!name.getStudentName().equals("vacant")){
+        int nonVacant = 0;
+        for(Student student : students){
+            if(!student.getStudentId().equals("vacant")){
                 studentsExist = true;
-                break;
+                nonVacant++; //Count the registered students
             }
         }
+        String[][] names = new String[nonVacant][2]; //Create an array based on the number of registered students
+        int index = 0;
+        for(Student student : students){
+            if(!student.getStudentId().equals("vacant")){
+                names[index][0] = student.getStudentName();
+                names[index][1] = student.getStudentId();//Add to the name of the registered student to the names array
+                index++;
+            }
+        }
+
+        for(int i = 0; i <names.length-1; i++){
+            for(int j = i+1; j <names.length; j++){
+                if(names[i][0].compareTo(names[j][0]) > 0){
+                    String[] temp = names[i];
+                    names[i] = names[j];
+                    names[j] = temp;
+                }
+            }
+        }
+
         if(!studentsExist){ //If the student names equal to vacant
             System.out.println("No students to show. Register a student or load the student details");
         }
 
-        for (Student name : studentsCopy) {
-            if (!name.getStudentName().equals("vacant")) {
-                System.out.print(order + ")");
-                System.out.printf("%-20s %10s%n", (name.getStudentName()), (name.getStudentId()) );
-                order++;
-            }
+        for (int i = 0; i < names.length;i++) {
+            System.out.print(i+1 + ")");
+            System.out.printf("%-20s %10s%n", (names[i][0]), (names[i][1]));
+
         }
 
         System.out.println();
@@ -433,6 +468,7 @@ public class MainMenu{
                             idExist = true;
                             System.out.println("Enter the Student Name: ");
                             String name = input.nextLine();
+                            name = name.substring(0,1).toUpperCase() + name.substring(1); //Capitalize the first letter of the first name
                             student.setStudentName(name);
                             System.out.println("Student name has been recorded successfully");
                         }

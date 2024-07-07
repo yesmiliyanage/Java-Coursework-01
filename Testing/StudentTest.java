@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class StudentTest {
     Student student = new Student();
 
-    @org.junit.jupiter.api.Test
+    @Test
     void getAndSetStudentId() {
         String expected = "w2084737";
         student.setStudentId(expected);
@@ -14,7 +14,7 @@ class StudentTest {
     }
 
 
-    @org.junit.jupiter.api.Test
+    @Test
     void getAndSetStudentName() {
         String expected = "Yesmi";
         student.setStudentName(expected);
@@ -23,7 +23,7 @@ class StudentTest {
     }
 
 
-    @org.junit.jupiter.api.Test
+    @Test
     void getAndSetModule1() {
         double expected = 90;
         student.setModule1(90);
@@ -32,7 +32,7 @@ class StudentTest {
     }
 
 
-    @org.junit.jupiter.api.Test
+    @Test
     void getAndSetModule2() {
         double expected = 100;
         student.setModule1(100);
@@ -41,7 +41,7 @@ class StudentTest {
     }
 
 
-    @org.junit.jupiter.api.Test
+    @Test
     void getAndSetModule3() {
         double expected = 90;
         student.setModule1(90);
@@ -50,7 +50,7 @@ class StudentTest {
     }
 
 
-    @org.junit.jupiter.api.Test
+    @Test
     void getTotalMark() {
         student.setModule1(90);
         student.setModule2(80);
@@ -60,7 +60,7 @@ class StudentTest {
         assertEquals(expected, actual);
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void getAverage() {
         student.setModule1(90);
         student.setModule2(80);
@@ -71,7 +71,7 @@ class StudentTest {
 
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void finalGrade() {
         student.setModule1(90);
         student.setModule2(80);
@@ -81,7 +81,7 @@ class StudentTest {
         assertEquals(expected, actual);
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void fullDetailsForStudent() {
         student.setStudentName("Yesmi");
         student.setStudentId("w2084737");
