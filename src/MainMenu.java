@@ -1,21 +1,21 @@
 import java.io.*;
-import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.Arrays;
+
 
 
 public class MainMenu{
-    static Scanner input = new Scanner(System.in);
     static Student[] students = new Student[100]; //initialize an array of student class which can contain 100 students
 
     public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
     //Creation of main menu and what methods to be called when different options are selected
-        int choice = 0;
+
         initialize(students);
         while(true){
+            System.out.println();
             System.out.println("1. Check Available Seats");
             System.out.println("2. Register a Student (With ID)");
             System.out.println("3. Delete a Student's details");
@@ -29,7 +29,7 @@ public class MainMenu{
             while (true) {
                 try {
                     System.out.println("Select an option : ");
-                    choice = input.nextInt();
+                    int choice = input.nextInt();
                     input.nextLine();
 
 
@@ -38,13 +38,13 @@ public class MainMenu{
                                 checkSeats();
                                 break;
                             case 2:
-                                registerStudent();
+                                registerStudent(input);
                                 break;
                             case 3:
-                                deleteStudent();
+                                deleteStudent(input);
                                 break;
                             case 4:
-                                findStudent();
+                                findStudent(input);
                                 break;
                             case 5:
                                 saveStudentDetails();
@@ -56,14 +56,14 @@ public class MainMenu{
                                 viewNames();
                                 break;
                             case 8:
-                                moduleDetailsManagement();
+                                moduleDetailsManagement(input);
                                 break;
                             case 9:
+                                input.close();
                                 System.out.println("Exiting the program....");
                                 return;
                             default:
                                 System.err.println("Select a number between 1 to 9");
-                                input.nextLine();
                                 continue;
 
                         }
@@ -76,24 +76,25 @@ public class MainMenu{
                     input.nextLine();
                 }
                 catch (Exception e) {
-                    System.err.println("Enter a valid input");
+                    System.err.println("Error Occurred:- " + e);
                     input.nextLine();
                 }
+
 
             }
 
         }
 
+
     }
 
     // Define the methods
     private static void initialize(Student[] students){
-        //Initialize the student name and id as vacant and module marks as null
+        //Initialize the student name and id as vacant and module marks as -1
         for(int i = 0; i < students.length;i++){
             students[i] = new Student();
 
         }
-        System.out.println();
     }
 
     public static boolean idPattern(String id){
@@ -102,7 +103,7 @@ public class MainMenu{
         return matcher.find();
     }
 
-    public static boolean wishToContinue(){
+    public static boolean wishToContinue(Scanner input){
         while(true) {
             System.out.println("Do you wish to continue: ");
             String response = input.nextLine().toLowerCase();
@@ -115,15 +116,16 @@ public class MainMenu{
                 return false;
             }
             else {
-                System.err.println("Enter yes/no");
+                System.err.println("Please enter yes/no");
             }
+
         }
     }
 
 
 
     public static void checkSeats(){
-        int count = 0; //Initialize the student count to 0
+        int count = 0; //Initialize the student count as 0
 
         for(int i = 0; i < 100;i++){
             if(students[i].getStudentName().equals("vacant")){
@@ -138,7 +140,19 @@ public class MainMenu{
             System.out.println("There are "+count+" vacancies available for new students");
 
         }
-    public static void registerStudent(){
+
+    public static void registerStudent(Scanner input){
+        int count = 0;
+        for(Student student : students){
+            if(student.getStudentId().equals("vacant")){ // Count the number of registered students
+                count++;
+            }
+        }
+        if(count == 0){ // If all the seats are occupied
+            System.out.println("No vacancies available for new students.");
+            return;
+        }
+
         int number;
         while(true){
             try{
@@ -146,9 +160,14 @@ public class MainMenu{
             number = input.nextInt();
             input.nextLine();
             }
+            catch(InputMismatchException e){
+                System.err.println("Invalid input. Please try again");
+                input.nextLine();
+                continue;
+            }
             catch(Exception e){
-                System.err.println("Enter a valid input");
-                input.next();
+                System.err.println("Error Occurred:- " + e);
+                input.nextLine();
                 continue;
             }
             if(number < 1 || number > 100){
@@ -169,7 +188,7 @@ public class MainMenu{
                                         break;
                                     }
                                 }
-                                if(uniqueId) {
+                                if(uniqueId) { //If the entered id is not an existing id
                                     try {
                                         students[i].setStudentId(id);
                                         System.out.println("Correct Format");
@@ -181,21 +200,22 @@ public class MainMenu{
                                 }
                                 else{
                                     System.out.println("This Student ID already exists!!!");
-                                    boolean response = wishToContinue();
+                                    boolean response = wishToContinue(input);
                                     if(!response){
                                         return;
                                     }
                                 }
                             }
                             catch (Exception e) {
-                                System.err.println("Enter a valid input");
+                                System.err.println("Error Occurred:- " + e);
+                                input.nextLine();
                             }
                         }
                 }
 
                 else{
                     System.out.println("Number "+ number +" is occupied");
-                    boolean response = wishToContinue();
+                    boolean response = wishToContinue(input);
                     if(!response){
                         return;
                     }
@@ -211,55 +231,59 @@ public class MainMenu{
                         students[i].setStudentName(name);
                         System.out.println("Student registration is successful!!!");
                         break;
-                    } catch (Exception e) {
-                        System.err.println("Enter a valid input");
-                        input.next();
+                    }
+                    catch(StringIndexOutOfBoundsException e){
+                        System.err.println("Invalid input. Please try again");
+                    }
+                    catch (Exception e) {
+                        System.err.println("Error Occurred:- " + e);
+                        input.nextLine();
                     }
                 }
 
-                boolean response = wishToContinue();
+                boolean response = wishToContinue(input);
                 if(!response){
                     return;
                 }
             }
         }
     }
-    public static void deleteStudent(){
+    public static void deleteStudent(Scanner input){
         while(true) {
             try {
                 boolean idExist = false;
                 System.out.println("Enter the Student ID to delete the details: ");
                 String id = input.nextLine();
                 boolean pattern = idPattern(id);
-                if(pattern){ //if the user input matches with the compiled pattern returns true
+                if(pattern){ //If the user input matches with the compiled pattern, returns true
                     for(int i = 0;i < 100;i++){
                         if(students[i].getStudentId().equals(id)){
                             idExist = true;
-                            students[i].setStudentName("vacant");
-                            students[i].setStudentId("vacant");
+                            students[i] = new Student(); // Replace the deleted student with a new Student object
                             System.out.println("Details for Student ID " +id+ " was deleted successfully...");
                             break;
                         }
                     }
-                    if(!idExist){
+                    if(!idExist){ //If there is no student registered with the entered id
                         System.out.println("This Student ID does not exist!!!");
-                        boolean response = wishToContinue();
+                        boolean response = wishToContinue(input);
                         if(!response){
                             return;
                         }
-
+                        else{
+                            continue;
+                        }
                     }
-
                 }
                 else{
                     System.err.println("Please enter a valid ID (Ex: w1234568)");
                 }
             }
             catch(Exception e){
-                System.err.println("Enter a valid input");
-                input.next();
+                System.err.println("Error Occurred:- " + e);
+                input.nextLine();
             }
-            boolean response = wishToContinue();
+            boolean response = wishToContinue(input);
             if(!response){
                 return;
             }
@@ -268,7 +292,7 @@ public class MainMenu{
 
     }
 
-    public static void findStudent(){
+    public static void findStudent(Scanner input){
         while(true) {
             try {
                 boolean idExist = false;
@@ -278,7 +302,7 @@ public class MainMenu{
                 if(pattern){
                     for(int i = 0;i < 100;i++){
                         if(students[i].getStudentId().equals(id)){
-                            idExist = true; //if the id exists the boolean becomes true
+                            idExist = true; //If the id exists, the boolean becomes true
                             System.out.println("Number: " + (i+1));
                             System.out.println("Name: " + students[i].getStudentName());
                             System.out.println("Student ID: " + students[i].getStudentId());
@@ -286,32 +310,29 @@ public class MainMenu{
                             break;
                         }
                     }
-                    if(!idExist) { //if the id is not found returns true
+                    if(!idExist) { //If the id is not found, returns true
                         System.out.println("This Student ID does not exist!!!");
                     }
-                    boolean response = wishToContinue();
+                    boolean response = wishToContinue(input);
                     if(!response){
                         return;
                     }
-
                 }
                 else{
                     System.err.println("Please enter a valid ID (Ex: w1234568)");
-
                 }
             }
             catch(Exception e){
-                System.err.println("Enter a valid input");
-                input.next();
+                System.err.println("Error Occurred:- " + e);
+                input.nextLine();
             }
-
         }
 
     }
 
     public static void saveStudentDetails() {
         try {
-            //creates a bufferedWriter object and gives a FileWriter object as the parameter
+            //Creates a bufferedWriter object and gives a FileWriter object as the parameter
             BufferedWriter writer = new BufferedWriter(new FileWriter("studentsDetails.txt", false)); //Write the data to the file in overwrite mode
             for (Student student : students) {
                 writer.write(student.fullDetailsForStudent());
@@ -324,7 +345,10 @@ public class MainMenu{
             System.err.println("This file cannot be found");
         }
         catch(IOException e){
-            System.err.println("Error occurred: "+e);
+            System.err.println("IOException:- " + e);
+        }
+        catch (Exception e){
+            System.err.println("Error Occurred:- " + e);
         }
 
 
@@ -335,8 +359,8 @@ public class MainMenu{
             BufferedReader reader = new BufferedReader(new FileReader("studentsDetails.txt"));
             String studentDetails;
             int index = 0;
-            while((studentDetails = reader.readLine()) != null){ //while the file has not reached the end
-                String[] details = studentDetails.split(","); //Splits the current line of string and add the split parts to details array
+            while((studentDetails = reader.readLine()) != null){ //While the file has not reached the end
+                String[] details = studentDetails.split(","); //Splits the current line of string and add the split parts into details array
                 if(details.length == 2) { //Only if the student name and id is recorded without module marks
                     students[index].setStudentName(details[0]);
                     students[index].setStudentId(details[1]);
@@ -351,66 +375,80 @@ public class MainMenu{
                 index++;
             }
             System.out.println("Data has been loaded. You can view and edit the details");
-            System.out.println();
         }
         catch(FileNotFoundException e){
-            System.err.println("File cannot be found. Data cannot be loaded from the file");
+            System.err.println("File cannot be found");
         }
         catch(IOException e){
-            System.err.println("Error Occurred: " + e);
+            System.err.println(" Data cannot be loaded from the file");
         }
         catch(Exception e){
-            System.err.println("Error Occurred"+ e);
+            System.err.println("Error Occurred:- "+ e);
         }
 
     }
 
 
     private static void viewNames(){
-        boolean studentsExist = false;
-        int nonVacant = 0;
+       try{
+           // Step 01 - Count the number of registered students
+           Student[] registeredStudents = returnRegisteredStudents();
+
+           // Step 02 - Add the registered students to a new array
+           int index = 0;
+           for(Student student : students){
+               if(!student.getStudentId().equals("vacant")){
+                   registeredStudents[index] = student;
+                   index++;
+               }
+           }
+
+           if(registeredStudents.length == 0){
+               System.out.println("No students to show. Load the student details or register a student");
+               return;
+           }
+
+           // Step 03 - Sort the names in the alphabetical order with bubble sort
+           boolean swapOccurred = true;
+           while(swapOccurred) {
+               swapOccurred = false;
+               for (int i = 0; i < registeredStudents.length - 1; i++) {
+                   if (registeredStudents[i].getStudentName().compareTo(registeredStudents[i + 1].getStudentName()) > 0) {
+                       swapOccurred = true;
+                       Student temp = registeredStudents[i];
+                       registeredStudents[i] = registeredStudents[i + 1];
+                       registeredStudents[i + 1] = temp;
+                   }
+               }
+           }
+
+           // Step 04 - Display the names and the ids of the registered students
+           for (int i = 0; i < registeredStudents.length;i++) {
+               System.out.print(i+1 + ")");
+               System.out.printf("%-20s %10s%n", (registeredStudents[i].getStudentName()), (registeredStudents[i].getStudentId()));
+           }
+
+       }
+       catch(Exception e){
+           System.err.println("Error Occurred:- "+ e);
+       }
+    }
+
+    public static Student[] returnRegisteredStudents(){
+        int nonVacant = 0; // Initialize a variable to store the registered student count
         for(Student student : students){
             if(!student.getStudentId().equals("vacant")){
-                studentsExist = true;
                 nonVacant++; //Count the registered students
             }
         }
-        String[][] names = new String[nonVacant][2]; //Create an array based on the number of registered students
-        int index = 0;
-        for(Student student : students){
-            if(!student.getStudentId().equals("vacant")){
-                names[index][0] = student.getStudentName();
-                names[index][1] = student.getStudentId();//Add to the name of the registered student to the names array
-                index++;
-            }
-        }
 
-        for(int i = 0; i <names.length-1; i++){
-            for(int j = i+1; j <names.length; j++){
-                if(names[i][0].compareTo(names[j][0]) > 0){
-                    String[] temp = names[i];
-                    names[i] = names[j];
-                    names[j] = temp;
-                }
-            }
-        }
-
-        if(!studentsExist){ //If the student names equal to vacant
-            System.out.println("No students to show. Register a student or load the student details");
-        }
-
-        for (int i = 0; i < names.length;i++) {
-            System.out.print(i+1 + ")");
-            System.out.printf("%-20s %10s%n", (names[i][0]), (names[i][1]));
-
-        }
-
-        System.out.println();
+        return new Student[nonVacant]; //Initialize an array based on the number of registered students
     }
 
-    public static void moduleDetailsManagement(){
+    public static void moduleDetailsManagement(Scanner input){
         //Creation of sub menu for option 8
         while(true) {
+            System.out.println();
             System.out.println("Welcome to the Module Management System");
             System.out.println("a. Add Student Name");
             System.out.println("b. Add Module Marks");
@@ -424,10 +462,10 @@ public class MainMenu{
                     String choice = input.nextLine();
                     switch (choice) {
                         case "a":
-                            addStudentName();
+                            addStudentName(input);
                             break;
                         case "b":
-                            addModuleMarks();
+                            addModuleMarks(input);
                             break;
                         case "c":
                             getSummary();
@@ -445,9 +483,12 @@ public class MainMenu{
                     break;
 
                 }
-                catch (Exception e) {
+                catch (StringIndexOutOfBoundsException e) {
                     System.err.println("Please enter a valid input");
-                    input.next();
+                    input.nextLine();
+                }
+                catch(Exception e){
+                    System.out.println("Error Occurred:- " + e);
                 }
 
             }
@@ -455,7 +496,8 @@ public class MainMenu{
         }
     }
 
-    public static void addStudentName(){
+
+    public static void addStudentName(Scanner input){
         while(true) {
             try {
                 boolean idExist = false;
@@ -484,28 +526,31 @@ public class MainMenu{
                     System.out.println("This Student ID does not exist");
                 }
             }
-            catch(Exception e){
-                System.err.println("Invalid Input");
-                input.next();
+            catch(StringIndexOutOfBoundsException | InputMismatchException  e){
+                System.err.println("Invalid input. Please try again");
             }
-            boolean response = wishToContinue();
+            catch(Exception e){
+                System.err.println("Error Occurred:- " + e);
+                input.nextLine();
+            }
+            boolean response = wishToContinue(input);
             if(!response){
                 return;
             }
         }
     }
 
-    public static void addModuleMarks(){
+    public static void addModuleMarks(Scanner input){
         while(true){
             try{
-                boolean found = false;
+                boolean idExist = false;
                 System.out.println("Enter the StudentID: ");
                 String id = input.nextLine();
                 boolean pattern = idPattern(id);
                 if(pattern){
                     for(Student student : students){
                         if(student.getStudentId().equals(id)){
-                            found = true;
+                            idExist = true;
                             while(true) {
                                 try{
                                     System.out.println("Enter Module 01 Marks: ");
@@ -561,103 +606,131 @@ public class MainMenu{
                             break;
 
                         }
-
                     }
                 }
+
                 else{
                     System.err.println("Please enter a valid ID (Ex: w1234568)");
                     continue;
                 }
 
-                if(!found){
+                if(!idExist){
                     System.out.println("This student ID does not exist");
                 }
             }
             catch(Exception e){
-                System.err.println("Enter a valid input " + e);
+                System.err.println("Error Occurred:- " + e);
                 input.nextLine();
                 continue;
             }
 
-            boolean response = wishToContinue();
+            boolean response = wishToContinue(input);
             if(!response){
                 return;
             }
-
         }
-
     }
 
     public static void getSummary() {
-        int count = 0;
+        try{
+            int count = 0;
 
-        for (int i = 0; i < 100; i++) {
-            if (!students[i].getStudentId().equals("vacant")) {
-                count += 1;
+            for (int i = 0; i < 100; i++) {
+                if (!students[i].getStudentId().equals("vacant")) { // Count the registered number of students
+                    count += 1;
+                }
             }
-        }
-        System.out.println("Total Number of Student Registrations:  " + count);
+            System.out.println("Total Number of Student Registrations:  " + count);
 
-        int highMarksModule1 = 0;
-        int highMarksModule2 = 0;
-        int highMarksModule3 = 0;
-        if(count != 0) {
-            for (Student student : students) {
-                if (student.getModule1() != -1 && student.getModule2() != -1 && student.getModule3() != -1){ //Ensures that the student in the current iteration holds a student not vacant and have all three module marks entered
-                    if (student.getModule1() > 40) {
-                        highMarksModule1++;
-                    }
-                    if (student.getModule2() > 40) {
-                        highMarksModule2++;
-                    }
-                    if (student.getModule3() > 40) {
-                        highMarksModule3++;
+            int highMarksModule1 = 0;
+            int highMarksModule2 = 0;
+            int highMarksModule3 = 0;
+            if(count != 0) {
+                for (Student student : students) {
+                    if (student.getModule1() != -1 && student.getModule2() != -1 && student.getModule3() != -1){ //Ensures that the student in the current iteration holds a student not vacant and have all three module marks entered
+                        if (student.getModule1() > 40) {
+                            highMarksModule1++;
+                        }
+                        if (student.getModule2() > 40) {
+                            highMarksModule2++;
+                        }
+                        if (student.getModule3() > 40) {
+                            highMarksModule3++;
+                        }
                     }
                 }
 
+                System.out.println("Students will be counted only if their all the three module marks have been entered");
+                System.out.println("Number of Students who Scored Higher than 40 in : ");
+                System.out.println("Module 01 : " + highMarksModule1);
+                System.out.println("Module 02 : " + highMarksModule2);
+                System.out.println("Module 03 : " + highMarksModule3);
+
             }
-
-            System.out.println("Number of Students who Scored Higher than 40 in : ");
-            System.out.println("Marks will be counted only for the students whose all the three module marks are entered");
-            System.out.println("Module 01 : " + highMarksModule1);
-            System.out.println("Module 02 : " + highMarksModule2);
-            System.out.println("Module 03 : " + highMarksModule3);
-
+            else{
+                System.out.println("No Registered students found");
+            }
         }
-        else{
-            System.out.println("No Registered students found");
+        catch(Exception e){
+            System.err.println("Error Occurred:- " + e);
         }
-        System.out.println();
 
     }
 
     public static void getFullReport(){
-        ArrayList<Student> studentsWithMarks = new ArrayList<>(); //Create new ArrayList of Student class
-        for(Student student : students){
-            if(student.getAverage() != -1){
-                studentsWithMarks.add(student); //Adds the students to the ArrayList whose marks are not null(If the marks are not null, average is also not null)
+        try{
+            // Step 01 - Count the number of students with marks
+            Student[] studentsWithMarks = returnStudentsWithMarks();
+
+            // Step 02 - Add the students with marks to a new array
+            int index = 0;
+            for (Student student : students) {
+                if (student.getTotalMark() != -1) {
+                    studentsWithMarks[index] = student;
+                    index++;
+                }
+            }
+
+            if(studentsWithMarks.length == 0){
+                System.out.println("Load student details and add marks or register a new student");
+                return;
+            }
+
+            // Step 03 - Sort the averages in the descending order with bubble sort
+            boolean swapOccurred = true;
+            while(swapOccurred){
+                swapOccurred = false;
+                for(int i = 0; i < studentsWithMarks.length - 1; i++) { //Loop stops one index before the length of the array because no more students to be compared after the last student
+                    if (studentsWithMarks[i].getAverage() < studentsWithMarks[i+1].getAverage()) { //Swaps the places if the first average is smaller than the next average to make the list in descending order
+                        swapOccurred = true;
+                        Student highAvg = studentsWithMarks[i+1];
+                        studentsWithMarks[i+1] = studentsWithMarks[i];
+                        studentsWithMarks[i] = highAvg;
+                    }
+                }
+            }
+
+            // Step 04 - Displays a full report for each student with marks
+            System.out.printf("%-20s %-20s %-20s %-20s %-20s %-10s %-20s %-20s%n", "Student Name", "Student ID", "Module 01", "Module 02", "Module 03" , "Total", "Average", "Grade"); //format string
+            for(Student student : studentsWithMarks){
+                student.fullReport();
             }
         }
-
-
-        boolean swapOccurred = true;
-        while(swapOccurred){
-            swapOccurred = false;
-        for(int i = 0; i < studentsWithMarks.size() - 1; i++) { //Loop stops one index before the size of the ArrayList because no more students to be compared after the last student
-                if (studentsWithMarks.get(i).getAverage() < studentsWithMarks.get(i + 1).getAverage()) { //Swaps the places if the first average is smaller than the next average to make the list in descending order
-                    swapOccurred = true;
-                    Student highAvg = studentsWithMarks.get(i+1);
-                    studentsWithMarks.set(i+1 , studentsWithMarks.get(i));
-                    studentsWithMarks.set(i,highAvg);
-                }
-
-        }
-
-        }
-        System.out.printf("%-20s %-20s %-20s %-20s %-20s %-10s %-20s %-20s%n", "Student Name", "Student ID", "Module 01", "Module 02", "Module 03" , "Total", "Average", "Grade"); //format string
-        for(Student student : studentsWithMarks){
-            student.fullReport();
+        catch(Exception e){
+            System.err.println("Error Occurred:- " + e);
         }
     }
+
+    public static Student[] returnStudentsWithMarks(){
+        int count = 0;
+        for(Student student : students){
+            if(student.getTotalMark() != -1){
+                count++;
+            }
+        }
+        return new Student[count]; //Create new Array of Student class to store the students with marks for all three modules
+    }
+
+
 
 }

@@ -9,6 +9,7 @@ public class Student{
     private final Module module3;
 
     public Student(){
+        // initialize module marks with -1
         module1 = new Module(-1);
         module2 = new Module(-1);
         module3 = new Module(-1);

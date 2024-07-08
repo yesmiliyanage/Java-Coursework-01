@@ -19,10 +19,6 @@ public class Module{
         }
     }
 
-    public String getModuleGrade(){
-        moduleGrade();
-        return moduleGrade;
-    }
 
     public void moduleGrade(){
         if (moduleMark >= 80) {
@@ -34,5 +30,11 @@ public class Module{
         } else {
             moduleGrade =  "Fail";
         }
+    }
+
+
+    public String getModuleGrade(){
+        moduleGrade();
+        return moduleGrade;
     }
 }
