@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 
 
 public class MainMenu{
-    static Student[] students = new Student[100]; //initialize an array of student class which can contain 100 students
+    static Student[] students = new Student[100]; //initialize an array of Student objects which can contain 100 students
 
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
@@ -106,7 +106,7 @@ public class MainMenu{
     public static boolean wishToContinue(Scanner input){
         while(true) {
             System.out.println("Do you wish to continue: ");
-            String response = input.nextLine().toLowerCase();
+            String response = input.nextLine().trim().toLowerCase();
 
             if (response.equals("yes")) {
                 return true;
@@ -226,7 +226,7 @@ public class MainMenu{
                 while(true) {
                     try {
                         System.out.println("Enter the student's name: ");
-                        String name = input.nextLine();
+                        String name = input.nextLine().trim();
                         name = name.substring(0,1).toUpperCase() + name.substring(1); //Capitalize the first letter of the first name
                         students[i].setStudentName(name);
                         System.out.println("Student registration is successful!!!");
@@ -380,7 +380,7 @@ public class MainMenu{
             System.err.println("File cannot be found");
         }
         catch(IOException e){
-            System.err.println(" Data cannot be loaded from the file");
+            System.err.println("Data cannot be loaded from the file");
         }
         catch(Exception e){
             System.err.println("Error Occurred:- "+ e);
@@ -483,10 +483,7 @@ public class MainMenu{
                     break;
 
                 }
-                catch (StringIndexOutOfBoundsException e) {
-                    System.err.println("Please enter a valid input");
-                    input.nextLine();
-                }
+
                 catch(Exception e){
                     System.out.println("Error Occurred:- " + e);
                 }
@@ -509,7 +506,7 @@ public class MainMenu{
                         if (student.getStudentId().equals(id)) {
                             idExist = true;
                             System.out.println("Enter the Student Name: ");
-                            String name = input.nextLine();
+                            String name = input.nextLine().trim();
                             name = name.substring(0,1).toUpperCase() + name.substring(1); //Capitalize the first letter of the first name
                             student.setStudentName(name);
                             System.out.println("Student name has been recorded successfully");
@@ -526,7 +523,7 @@ public class MainMenu{
                     System.out.println("This Student ID does not exist");
                 }
             }
-            catch(StringIndexOutOfBoundsException | InputMismatchException  e){
+            catch(StringIndexOutOfBoundsException e){
                 System.err.println("Invalid input. Please try again");
             }
             catch(Exception e){

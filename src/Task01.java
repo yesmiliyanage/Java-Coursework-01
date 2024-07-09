@@ -90,7 +90,7 @@ public class Task01 {
     public static boolean wishToContinue(Scanner input){
         while(true) {
             System.out.println("Do you wish to continue: ");
-            String response = input.nextLine().toLowerCase(); // Convert the input to lower case
+            String response = input.nextLine().trim().toLowerCase(); // Convert the input to lower case
 
             if (response.equals("yes")) {
                 return true;
@@ -220,7 +220,7 @@ public class Task01 {
                 while(true) {
                     try {
                         System.out.println("Enter the student's name: ");
-                        String name = input.nextLine();
+                        String name = input.nextLine().trim();
                         name = name.substring(0,1).toUpperCase() + name.substring(1);
                         students[i][0] = name;
                         System.out.println("Student registration is successful!!!");
@@ -228,7 +228,6 @@ public class Task01 {
                     }
                     catch(StringIndexOutOfBoundsException e){
                         System.err.println("Invalid input. Please try again");
-                        input.nextLine();
                     }
                     catch (Exception e) {
                         System.out.println("Error Occurred:- " + e);
@@ -395,6 +394,7 @@ public class Task01 {
         }
 
 
+        // Sort the names in the alphabetical order
         for(int i = 0; i <names.length-1; i++){
             for(int j = i+1; j <names.length; j++){
                 if(names[i][0].compareTo(names[j][0]) > 0){
@@ -404,15 +404,10 @@ public class Task01 {
                 }
             }
         }
-        int order = 1;
 
-
-        for (String[] name : names) {
-            System.out.println(order + ") " + name[0] +"  " +name[1]);
-            order++;
-
+        for (int i = 0;i<names.length;i++) {
+            System.out.println(i+1 + ") " + names[i][0] +"  " +names[i][1]);
         }
-
         System.out.println();
     }
 }
