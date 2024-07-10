@@ -156,6 +156,7 @@ public class Task01 {
             }
             catch(InputMismatchException e){
                 System.err.println("Invalid input. Please try again");
+                input.nextLine();
                 continue;
             }
             catch(Exception e){

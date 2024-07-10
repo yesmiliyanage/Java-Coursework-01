@@ -102,7 +102,5 @@ class StudentTest {
         assertEquals(expected,actual);
     }
 
-    @Test
-    void testFullReport() {
-    }
+
 }

@@ -5,7 +5,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-
 public class MainMenu{
     static Student[] students = new Student[100]; //initialize an array of Student objects which can contain 100 students
 
@@ -128,7 +127,7 @@ public class MainMenu{
         int count = 0; //Initialize the student count as 0
 
         for(int i = 0; i < 100;i++){
-            if(students[i].getStudentName().equals("vacant")){
+            if(students[i].getStudentId().equals("vacant")){
                 System.out.println("Number "+(i+1)+" is vacant");
                 count++; //If vacant, increment the count by 1
             }
@@ -266,13 +265,6 @@ public class MainMenu{
                     }
                     if(!idExist){ //If there is no student registered with the entered id
                         System.out.println("This Student ID does not exist!!!");
-                        boolean response = wishToContinue(input);
-                        if(!response){
-                            return;
-                        }
-                        else{
-                            continue;
-                        }
                     }
                 }
                 else{
@@ -493,6 +485,37 @@ public class MainMenu{
         }
     }
 
+    public static void addMarksForModule(Student student, String moduleName, Scanner input){
+
+        while(true) {
+            try{
+                System.out.println("Enter " + moduleName +" Marks: ");
+                double mark = input.nextDouble();
+                input.nextLine();
+                switch (moduleName){ // Set the module mark for the student according to the module name
+                    case "Module 01":
+                        student.setModule1(mark);
+                        break;
+                    case "Module 02":
+                        student.setModule2(mark);
+                        break;
+                    case "Module 03":
+                        student.setModule3(mark);
+                        break;
+                }
+                break;
+            }
+            catch(IllegalArgumentException e){
+                System.err.println(e.getMessage());
+            }
+            catch(InputMismatchException e){
+                System.err.println("Invalid input. Enter the marks again");
+                input.nextLine();
+            }
+
+        }
+    }
+
 
     public static void addStudentName(Scanner input){
         while(true) {
@@ -548,57 +571,13 @@ public class MainMenu{
                     for(Student student : students){
                         if(student.getStudentId().equals(id)){
                             idExist = true;
-                            while(true) {
-                                try{
-                                    System.out.println("Enter Module 01 Marks: ");
-                                    double mark1 = input.nextDouble();
-                                    student.setModule1(mark1);
-                                    break;
-                                }
-                                catch(IllegalArgumentException e){
-                                    System.err.println(e.getMessage());
-                                }
-                                catch(InputMismatchException e){
-                                    System.err.println("Invalid input. Enter the marks again");
-                                    input.nextLine();
-                                }
 
-                            }
+                            addMarksForModule(student, "Module 01", input);
 
-                            while(true) {
-                                try{
-                                    System.out.println("Enter Module 02 Marks: ");
-                                    double mark2 = input.nextDouble();
-                                    student.setModule2(mark2);
-                                    break;
-                                }
-                                catch(IllegalArgumentException e){
-                                    System.err.println(e.getMessage());
-                                }
-                                catch(InputMismatchException e){
-                                    System.err.println("Invalid input. Enter the marks again");
-                                    input.nextLine();
-                                }
+                            addMarksForModule(student, "Module 02", input);
 
-                            }
+                            addMarksForModule(student, "Module 03", input);
 
-                            while(true) {
-                                try{
-                                    System.out.println("Enter Module 03 Marks: ");
-                                    double mark3 = input.nextDouble();
-                                    student.setModule3(mark3);
-                                    break;
-                                }
-                                catch(IllegalArgumentException e){
-                                    System.err.println(e.getMessage());
-                                }
-                                catch(InputMismatchException e){
-                                    System.err.println("Invalid input. Enter the marks again");
-                                    input.nextLine();
-                                }
-
-                            }
-                            input.nextLine();
                             System.out.println("Module marks for Student ID " + student.getStudentId() + " was Recorded Successfully...");
                             break;
 
